@@ -8,6 +8,7 @@
 const recastai = require('mandre')
 const config = require('./config')
 
+
 const replyMessage = require('./message')
 
 // Instantiate Recast.AI SDK, just for connect service
