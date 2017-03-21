@@ -10,7 +10,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 
 const config = require('./config')
-const bot = require('./bot')
+const bot = require('./bot').bot
 
 // Start Express server
 const app = express()

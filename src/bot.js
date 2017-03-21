@@ -19,7 +19,7 @@ const connect = new recastai.connect(config.recast.token)
  * It takes body of the request
  * And optionally, the response object of your server
  */
-const bot = (body, response) => {
+export const bot = (body, response) => {
   /*
    * Call the Recast.AI SDK function to handle message from Bot Connector
    * This function will:
@@ -29,5 +29,3 @@ const bot = (body, response) => {
    */
   connect.handleMessage({ body }, response, replyMessage)
 }
-
-module.exports = bot
