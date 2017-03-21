@@ -19,15 +19,22 @@ const client = new recastai(config.recast.token)
  * And optionally, the response object of your server
  */
 export const bot = (body, response, callback) => {
-  const text = body.text
-
-  /*
-   * If your request come from testing route
-   * ie curl -X POST https://run.recast.ai/{userslug}-{botslug}
-   * It just sends it to Recast.AI and return replies
-   */
-  if (text) {
-    client.request.converseText(text, { conversationToken: process.env.CONVERSATION_TOKEN || null })
+  if (body.message) {
+    /*
+    * Call the Recast.AI SDK function to handle message from Bot Connector
+    * This function will:
+    * - Return a response with the status code 200
+    * - Create a Message object, easy usable in your code
+    * - Call the 'replyMessage' function, with this Message object in parameter
+    */
+    client.connect.handleMessage({ body }, response, replyMessage)
+  } else if (body.text) {
+    /*
+    * If your request come from testing route
+    * ie curl -X POST https://run.recast.ai/{userslug}-{botslug}
+    * It just sends it to Recast.AI and return replies
+    */
+    client.request.converseText(body.text, { conversationToken: process.env.CONVERSATION_TOKEN || null })
       .then((res) => {
         callback(null, {
           reply: res.reply(),
@@ -37,14 +44,7 @@ export const bot = (body, response, callback) => {
       .catch((err) => {
         callback(err)
       })
-  } else if (body.message) {
-    /*
-    * Call the Recast.AI SDK function to handle message from Bot Connector
-    * This function will:
-    * - Return a response with the status code 200
-    * - Create a Message object, easy usable in your code
-    * - Call the 'replyMessage' function, with this Message object in parameter
-    */
-    client.connect.handleMessage({ body }, response, replyMessage)
+  } else {
+    callback('No text provided')
   }
 }
